@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Web Bash</title>
+	<link rel="stylesheet" type="text/css" href="../static/css/main.css">
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.0/angular.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.0/angular-resource.js"></script>
+	<script type="text/javascript" src="../static/js/web-bash.js"></script>
+</head>
+<body ng-app="webBash" ng-controller="BashController">
+	<div ng-repeat="entry in cliHistory">
+		<span ng-show="output">$</span><pre>{{ entry.content }}</pre>
+	</div>
+	<div>
+		<span>$</span>
+		<form id="active-prompt" ng-submit="executeCommand()">
+			<input id="active-prompt-input" type="text" ng-model="activeCommand"/>
+		</form>
+	</div>
+</body>
+</html>
