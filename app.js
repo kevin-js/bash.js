@@ -13,13 +13,15 @@ app.set('views', path.join(__dirname, '/public/views'));
 app.set('view engine', 'ejs');
 
 app.get('/', function(req, res) {
-	res.render('index');
+	res.append('Set-Cookie', 'pwd=' + __dirname).render('index');
 });
 
 app.post('/api/command', function(req, res) {
 	var command = req.body.command;
-	exec(command, function(error, stdout, stderr) {
-		if (stderr) res.send(stderr);
+	var pwd = req.body.pwd;
+	exec(command, { cwd: pwd }, function(error, stdout, stderr) {
+		if (error) res.send('An error occurred. Your command could not be executed.');
+		else if (stderr) res.send(stderr);
 		else res.send(stdout);
 	});
 });

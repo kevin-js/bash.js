@@ -1,7 +1,8 @@
-var webBash = angular.module('webBash', ['ngResource']);
+var webBash = angular.module('webBash', ['ngCookies']);
 
-var bashController = webBash.controller('BashController', ['$scope', '$http', function($scope, $http) {
+var bashController = webBash.controller('BashController', ['$scope', '$http', '$cookies', function($scope, $http, $cookies) {
 	$scope.activeCommand = '';
+	$scope.pwd = $cookies.get('pwd');
 	$scope.cliHistory = [];
 
 	$scope.executeCommand = function() {
@@ -9,7 +10,10 @@ var bashController = webBash.controller('BashController', ['$scope', '$http', fu
 			'content': $scope.activeCommand,
 			'command': true
 		});
-		$http.post('/api/command', {'command': $scope.activeCommand})
+		$http.post('/api/command', {
+			'command': $scope.activeCommand,
+			'pwd': $cookies.get('pwd')
+		})
 			.then(function(response) {
 				response.data.split('\n').forEach(function(element) {
 					$scope.cliHistory.push({
@@ -17,10 +21,11 @@ var bashController = webBash.controller('BashController', ['$scope', '$http', fu
 						'command': false
 					});
 				});
+				$scope.pwd = $cookies.get('pwd');
 			})
 			.catch(function(response){
 				console.log(response);
 			});
-		$('#active-prompt-input').val('');
+		$scope.activeCommand = '';
 	};
 }]);
